@@ -1,0 +1,32 @@
+/*
+ * Блок-схема программы "Быки и коровы" (лабораторная работа №3, задание №3).
+ * Построение:  dot -Tpng block_schema.dot -o block_schema.png
+ */
+digraph bulls_cows {
+    node [shape=box, style=filled, fillcolor="#F2F2F2", fontname="Times New Roman",
+          fontsize=12, margin="0.18,0.10"];
+    edge [fontname="Times New Roman", fontsize=11];
+
+    start  [shape=oval, style=filled, fillcolor="#E8F0FE", label="Начало"];
+    init   [label="Установка локали, seed генератора\nвывод правил игры"];
+    secret [label="Генерация секрета:\n4 различные цифры"];
+    prompt [shape=parallelogram, fillcolor="#FFF8E1", label="Ввод варианта"];
+    check  [shape=diamond, fillcolor="#FCE4EC", label="Ввод корректен?\n(4 различные цифры)"];
+    again  [shape=parallelogram, fillcolor="#FFF8E1", label="Вывод:\n\"Некорректный ввод\""];
+    count  [label="Подсчёт быков и коров"];
+    out    [shape=parallelogram, fillcolor="#FFF8E1", label="Вывод:\n\"N бык(ов) и M коров(а)\""];
+    win    [shape=diamond, fillcolor="#FCE4EC", label="4 быка?"];
+    done   [shape=oval, style=filled, fillcolor="#E8F0FE", label="Конец"];
+
+    start  -> init;
+    init   -> secret;
+    secret -> prompt;
+    prompt -> check;
+    check  -> again [label="нет"];
+    again  -> prompt;
+    check  -> count [label="да"];
+    count  -> out;
+    out    -> win;
+    win    -> done  [label="да"];
+    win    -> prompt [label="нет"];
+}
