@@ -1,40 +1,53 @@
+/*
+ * main.cpp — главная программа лабораторной работы №3, задание №3.
+ *
+ * Игра "Быки и коровы". Компьютер загадывает число из четырёх различных
+ * цифр, пользователь пытается его угадать, получая подсказки в виде
+ * количества "быков" и "коров".
+ *
+ * Вся игровая логика вынесена в отдельный модуль bulls_cows
+ * (файлы bulls_cows.h и bulls_cows.cpp) — это и есть раздельная компиляция.
+ */
+
+#include "bulls_cows.h"
+
+#include <clocale>
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
-#include <string>
 
-class Student {
-private:
-    std::string name;
-    int age;
-    double averageScore;
+using namespace std;
 
-public:
-    Student(const std::string& n, int a, double avg)
-        : name(n), age(a), averageScore(avg) {}
-
-    void display() const {
-        std::cout << "Студент: " << name
-            << ", возраст: " << age
-            << ", средний балл: " << averageScore << std::endl;
-    }
-
-    void setAverageScore(double avg) {
-        averageScore = avg;
-    }
-};
-
-int main() {
+int main(int argc, char* argv[])
+{
     setlocale(LC_ALL, "Russian");
+    srand((unsigned int)time(NULL));
 
-    Student student1("Иванов Иван", 20, 4.5);
-    Student student2("Петрова Анна", 19, 4.8);
+    int secret[DIGITS];
 
-    std::cout << "Информация о студентах:\n";
-    student1.display();
-    student2.display();
+    if (argc >= 2) {
+        /*
+         * Если задан аргумент командной строки, он используется как
+         * загаданное число. Это нужно для воспроизводимого примера
+         * работы программы, приведённого в отчёте.
+         */
+        if (!parseGuess(argv[1], secret)) {
+            cout << "Некорректное загаданное число." << endl;
+            return 1;
+        }
+    } else {
+        generateSecret(secret);
+    }
 
-    student1.setAverageScore(4.7);
-    std::cout << "\nПосле изменения среднего балла:\n";
-    student1.display();
+    cout << "Игра \"Быки и коровы\"." << endl;
+    cout << "Загадано число из " << DIGITS << " различных цифр." << endl;
+    cout << "Называйте варианты, пока не прозвучит \"4 быка(ов)\"." << endl;
+    cout << endl;
+
+    int tries = playGame(secret);
+
+    cout << endl;
+    cout << "Число отгадано за " << tries << " попыток(и)." << endl;
 
     return 0;
 }
