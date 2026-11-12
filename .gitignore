@@ -20,3 +20,8 @@
 *.opensdf
 *.VC.db
 *.VC.opendb
+
+# каталоги сборки Visual Studio
+x64/
+Debug/
+Release/
